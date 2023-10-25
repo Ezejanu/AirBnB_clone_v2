@@ -15,12 +15,14 @@ class BaseModel:
             self.updated_at = datetime.now()
             storage.new(self)
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+            if 'updated_at' in kwargs:
+                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+            if 'created_at' in kwargs:
+                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
-            self.__dict__.update(kwargs)
+            # del kwargs['__class__']
+            # self.__dict__.update(kwargs)
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -33,12 +35,27 @@ class BaseModel:
         self.updated_at = datetime.now()
         storage.save()
 
+#    def to_dict(self):
+#       """Convert instance into dict format"""
+#        dictionary = {}
+#        dictionary.update(self.__dict__)
+#        dictionary.update({'__class__':
+#                          (str(type(self)).split('.')[-1]).split('\'')[0]})
+#        dictionary['created_at'] = self.created_at.isoformat()
+#        dictionary['updated_at'] = self.updated_at.isoformat()
+#        return dictionary
+
+
     def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = {}
-        dictionary.update(self.__dict__)
-        dictionary.update({'__class__':
-                          (str(type(self)).split('.')[-1]).split('\'')[0]})
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
-        return dictionary
+        '''Return a dict representation fo an instance of BaseModel class.
+
+        - The dict contains all the set instance attributes.
+        - It also contains a key/value pair: __class__/te name of the class
+        - The created_at and updated_at values will be in the iso format.'''
+
+        dict_rep = self.__dict__.copy()
+        dict_rep['__class__'] = self.__class__.__name__
+        dict_rep['created_at'] = self.created_at.isoformat()
+        dict_rep['updated_at'] = self.updated_at.isoformat()
+
+        return dict_rep    
