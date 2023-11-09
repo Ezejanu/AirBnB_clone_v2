@@ -19,7 +19,7 @@ def do_pack():
 
     # Create versions, if does not exist
 
-    if not os.paths.exists('versions'):
+    if not os.path.exists('versions'):
         os.makedirs('versions')
 
     # Generate the archive file name
