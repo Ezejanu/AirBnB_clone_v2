@@ -36,10 +36,12 @@ def display_python(text):
     formatted_text = text.replace('_', ' ')
     return f'Python {escape(formatted_text)}'
 
+
 @app.route('/number/<int:n>', strict_slashes=False)
 def display_n(n):
     """ Display "n is a number" only if n is an integer """
     return f'{escape(n)} is a number'
+
 
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def display_number_template(n):
